@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QApplication, QInputDialog, QMessageBox
-from sniptool import start_snip
-from API_TEST import chat_with_gpt_image
+from Python_Files.screenshot import start_snip
+from Python_Files.api_request import chat_with_gpt_image
 import sys
 
 def handle_capture(image_path):
