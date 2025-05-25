@@ -26,10 +26,10 @@ class SnippingWidget(QtWidgets.QWidget):
         painter.setRenderHint(QtGui.QPainter.Antialiasing)
 
         # Dim background
-        painter.fillRect(self.rect(), QtGui.QColor(0, 0, 0, 100))  # semi-transparent black
+        painter.fillRect(self.rect(), QtGui.QColor(0, 0, 0, 100))  
 
         # Draw red rectangle
-        pen = QtGui.QPen(QtGui.QColor("red"), 2)
+        pen = QtGui.QPen(QtGui.QColor("gray"), 2)
         painter.setPen(pen)
         painter.drawRect(QtCore.QRect(self.begin, self.end))
 
