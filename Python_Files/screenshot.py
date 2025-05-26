@@ -1,4 +1,5 @@
-# screenshot.py
+# screenshot.py (unchanged original)
+import sys
 import os
 import uuid
 from PyQt5 import QtWidgets, QtGui, QtCore
@@ -8,9 +9,9 @@ TEMP_FOLDER = os.path.join(os.getcwd(), ".peek_cache")
 os.makedirs(TEMP_FOLDER, exist_ok=True)
 
 class SnippingWidget(QtWidgets.QWidget):
-    def __init__(self, callback=None):
+    def __init__(self):
         super().__init__()
-        self.callback = callback
+        self.setWindowTitle("Snip")
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)
         self.setWindowState(QtCore.Qt.WindowFullScreen)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -50,9 +51,11 @@ class SnippingWidget(QtWidgets.QWidget):
         print("Saved to:", filename)
         self.close()
 
-        if self.callback:
-            self.callback(filename)
+def snip():
+    app = QtWidgets.QApplication(sys.argv)
+    window = SnippingWidget()
+    window.show()
+    app.exec_()
 
-def take_screenshot(callback):
-    snipper = SnippingWidget(callback)
-    snipper.show()
+if __name__ == "__main__":
+    snip()
