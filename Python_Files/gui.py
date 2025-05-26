@@ -94,7 +94,7 @@ class PeekAssistant(QWidget):
         outer_layout.addWidget(frame)
         self.setLayout(outer_layout)
 
-        self.setFixedSize(300, 50)
+        self.setFixedSize(300, 40)
         self.move(20, 20)
 
     def keyPressEvent(self, event):
@@ -128,4 +128,4 @@ if __name__ == "__main__":
 
     # The "PeekAssistant" class is our reference to the current window object PeekAI runs within.
 
-    
+
