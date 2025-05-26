@@ -86,9 +86,17 @@ if __name__ == "__main__":
     window = PeekAssistant()
     window.show()
 
-    # 🔥 Qt-native hotkeys — NO threading issues
-    toggle_shortcut = QShortcut(QKeySequence("Ctrl+H"), window)
-    toggle_shortcut.activated.connect(toggle_visibility)
+    import threading
+    import keyboard
+    
+    # # 🔥 Qt-native hotkeys — NO threading issues
+    # toggle_shortcut = QShortcut(QKeySequence("Ctrl+H"), window)
+    # toggle_shortcut.activated.connect(toggle_visibility)
+
+    def hotkeys():
+        keyboard.add_hotkey('ctrl+h', toggle_visibility)
+    
+    threading.Thread(target=hotkeys, daemon=True).start()
 
     f4_shortcut = QShortcut(QKeySequence("F4"), window)
     f4_shortcut.activated.connect(run_f4_logic)
