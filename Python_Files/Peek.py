@@ -81,6 +81,7 @@ def run_f4_logic():
         print("[F4] Prompt only mode")
         toggle_visibility()
         dialog = PromptDialog()
+        dialog.move(window.pos())
         if dialog.exec_():
             prompt = dialog.prompt
             print(f"[F4] User prompt: {prompt}")
