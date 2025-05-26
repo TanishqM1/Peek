@@ -1,10 +1,9 @@
-import sys
+# screenshot.py
 import os
 import uuid
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PIL import ImageGrab
 
-# Create cache folder
 TEMP_FOLDER = os.path.join(os.getcwd(), ".peek_cache")
 os.makedirs(TEMP_FOLDER, exist_ok=True)
 
@@ -12,7 +11,6 @@ class SnippingWidget(QtWidgets.QWidget):
     def __init__(self, callback=None):
         super().__init__()
         self.callback = callback
-        self.setWindowTitle("Snip")
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)
         self.setWindowState(QtCore.Qt.WindowFullScreen)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -23,7 +21,7 @@ class SnippingWidget(QtWidgets.QWidget):
     def paintEvent(self, event):
         painter = QtGui.QPainter(self)
         painter.setRenderHint(QtGui.QPainter.Antialiasing)
-        painter.fillRect(self.rect(), QtGui.QColor(0, 0, 0, 100))  # Dim
+        painter.fillRect(self.rect(), QtGui.QColor(0, 0, 0, 100))
         pen = QtGui.QPen(QtGui.QColor("gray"), 2)
         painter.setPen(pen)
         painter.drawRect(QtCore.QRect(self.begin, self.end))
@@ -52,12 +50,9 @@ class SnippingWidget(QtWidgets.QWidget):
         print("Saved to:", filename)
         self.close()
 
-        # 🔁 Trigger callback with file path
         if self.callback:
             self.callback(filename)
 
-def start_snip(callback):
-    app = QtWidgets.QApplication(sys.argv)
-    window = SnippingWidget(callback)
-    window.show()
-    app.exec_()
+def take_screenshot(callback):
+    snipper = SnippingWidget(callback)
+    snipper.show()
