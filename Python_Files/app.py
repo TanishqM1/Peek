@@ -102,7 +102,8 @@ if __name__ == "__main__":
         keyboard.add_hotkey('ctrl+p', toggleprompt)
     threading.Thread(target=hotkeys, daemon=True).start()
 
-    # Local hotkey for F4
+    # local f4 hotkey. (must be run by the same thread as PyQT, otherwise it will crash.)
+    # CAN BE OPTIMIZED
     f4_shortcut = QShortcut(QKeySequence("F4"), window)
     f4_shortcut.activated.connect(run_f4_logic)
 
