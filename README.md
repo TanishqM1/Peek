@@ -26,7 +26,7 @@
 - "ctrl+alt+q" exits the program.
 - "ctrl+h" toggles visilbity.
 - "ctrl+s" toggles the screenshot swtich.
-- "ctrl+p" toggles the propmt switch.
+- "ctrl+p" toggles the prompt switch.
 
 
 
