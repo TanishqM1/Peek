@@ -21,5 +21,12 @@
 - Allow users to save multiple screenshots, or files as projects to use older information as a part of their prompt.
 
 
+#### current hotkeys
+- "f4" executes the program, and begins screenshot/prompting.
+- "ctrl+alt+q" exits the program.
+- "ctrl+h" toggles visilbity.
+- "ctrl+s" toggles the screenshot swtich.
+- "ctrl+p" toggles the propmt switch.
+
 
 
