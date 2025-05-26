@@ -29,7 +29,7 @@ class ToggleSwitch(QCheckBox):
 class PeekAssistant(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Peek Assistant")
+        self.setWindowTitle("PeekAssistant")
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
 

@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt
 class PromptDialog(QDialog):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Ask ChatGPT")
+        self.setWindowTitle("PeekPrompt")
         self.setFixedSize(400, 140)
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.Dialog)
         self.setStyleSheet("""
@@ -45,7 +45,7 @@ class PromptDialog(QDialog):
         layout.setSpacing(12)
         layout.setContentsMargins(20, 20, 20, 20)
 
-        label = QLabel("Enter your question:")
+        label = QLabel("Enter Prompt:")
         self.textbox = QLineEdit()
         layout.addWidget(label)
         layout.addWidget(self.textbox)
