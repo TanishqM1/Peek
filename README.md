@@ -6,3 +6,4 @@ Pass to send_prompt_with_image(prompt, image_path) or similar
 
 2. Make the prompt window look neater. When it opens, the PeekAI window should be invisibile while it is open, and it should reappear when it is closed.
 
+3. Fix Visibility Hotkey
