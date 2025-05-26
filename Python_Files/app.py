@@ -40,6 +40,7 @@ def run_f4_logic():
     # CASE: both switches are ON
     if screenshot_enabled and prompt_enabled:
         print("[F4] Launching screenshot.py...")
+        toggle_visibility()
         subprocess.run([sys.executable, "Python_Files\\screenshot.py"])
 
         image_path = get_latest_screenshot()
@@ -54,26 +55,31 @@ def run_f4_logic():
             print(f"Screenshot path: {image_path}")
         else:
             print("Prompt cancelled.")
+        toggle_visibility()
 
     # CASE: screenshot only!
     elif screenshot_enabled and not prompt_enabled:
         print("[F4] Screenshot only mode")
+        toggle_visibility()
         subprocess.run([sys.executable, "Python_Files\\screenshot.py"])
         image_path = get_latest_screenshot()
         if not image_path:
             print("No screenshot was saved.")
             return
         print(f"[F4] Screenshot saved to: {image_path}")
+        toggle_visibility()
 
     # CASE: prompt only!
     elif prompt_enabled and not screenshot_enabled:
         print("[F4] Prompt only mode")
+        toggle_visibility()
         dialog = PromptDialog()
         if dialog.exec_():
             prompt = dialog.prompt
             print(f"[F4] User prompt: {prompt}")
         else:
             print("Prompt cancelled or empty.")
+        toggle_visibility()
     else:
         print("Both Switches Are Off!")
 
