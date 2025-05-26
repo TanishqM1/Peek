@@ -95,7 +95,7 @@ class PeekAssistant(QWidget):
         self.setLayout(outer_layout)
 
         self.setFixedSize(300, 40)
-        self.move(20, 20)
+        self.move(180, 60)
 
     def keyPressEvent(self, event):
         self.pressed_keys.add(event.key())
