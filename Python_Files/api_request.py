@@ -4,7 +4,7 @@ import base64
 from dotenv import load_dotenv
 
 load_dotenv()
-openai.api_key = os.getenv("CHATGPT_KEY")
+openai.api_key = os.getenv("CHATGPT_KEY") 
 
 def chat_with_gpt_image(prompt: str, image_path: str):
     with open(image_path, "rb") as image_file:

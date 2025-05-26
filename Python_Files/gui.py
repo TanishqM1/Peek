@@ -125,3 +125,7 @@ if __name__ == "__main__":
     window = PeekAssistant()
     window.show()
     sys.exit(app.exec_())
+
+    # The "PeekAssistant" class is our reference to the current window object PeekAI runs within.
+
+    

@@ -59,3 +59,7 @@ def snip():
 
 if __name__ == "__main__":
     snip()
+
+
+# Taken straight from PyQt fourms and documentation, altered for sizing, colouring, and transparency.
+
