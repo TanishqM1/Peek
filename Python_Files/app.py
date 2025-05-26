@@ -77,6 +77,8 @@ def run_f4_logic():
             # You can now use the `prompt` variable (e.g., send to GPT)
         else:
             print("Prompt cancelled or empty.")
+    else:
+        print("Both Switches Are Off!")
 
 
 if __name__ == "__main__":
