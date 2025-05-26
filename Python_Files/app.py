@@ -1,12 +1,11 @@
 # app.py
 import sys
 import os
-import time
-import keyboard
 import subprocess
-from PyQt5.QtWidgets import QApplication, QInputDialog
+from PyQt5.QtWidgets import QApplication, QInputDialog, QShortcut
+from PyQt5.QtGui import QKeySequence
+from PyQt5.QtCore import QTimer
 from gui import PeekAssistant
-from PyQt5.QtCore import QMetaObject, Qt, Q_ARG, QTimer
 
 TEMP_FOLDER = os.path.join(os.getcwd(), ".peek_cache")
 
@@ -17,51 +16,51 @@ def toggle_visibility():
         window.show()
 
 def get_latest_screenshot():
-    files = sorted(
-        [f for f in os.listdir(TEMP_FOLDER) if f.endswith(".png")],
-        key=lambda x: os.path.getmtime(os.path.join(TEMP_FOLDER, x)),
-        reverse=True
-    )
-    return os.path.join(TEMP_FOLDER, files[0]) if files else None
+    try:
+        files = [f for f in os.listdir(TEMP_FOLDER) if f.endswith(".png")]
+        if not files:
+            return None
+        latest = max(files, key=lambda x: os.path.getmtime(os.path.join(TEMP_FOLDER, x)))
+        return os.path.join(TEMP_FOLDER, latest)
+    except Exception as e:
+        print("Error locating screenshot:", e)
+        return None
 
-def Execute():
+def run_f4_logic():
+    print("[Qt] Running F4 logic")
     screenshot_enabled = window.ss_switch.isChecked()
     prompt_enabled = window.prompt_switch.isChecked()
+    print(f"Switches: screenshot={screenshot_enabled}, prompt={prompt_enabled}")
 
     if screenshot_enabled and prompt_enabled:
-        print("F4 → Screenshot and Prompt enabled")
-
-        # Step 1: Run old screenshot script (blocking)
+        print("[F4] Launching screenshot.py...")
         subprocess.run([sys.executable, "Python_Files\screenshot.py"])
 
-        # Step 2: Get the latest screenshot file
         image_path = get_latest_screenshot()
         if not image_path:
             print("No screenshot found.")
             return
 
-        # Step 3: Use QTimer to safely prompt user from main thread
-        def show_prompt():
-            prompt, ok = QInputDialog.getText(window, "Ask ChatGPT", "Enter your question:")
-            if ok and prompt.strip():
-                print(f"Prompt: {prompt.strip()}")
-                print(f"Screenshot path: {image_path}")
-                # TODO: send to GPT here
-            else:
-                print("Prompt cancelled.")
-
-        QTimer.singleShot(0, show_prompt)
-
-
+        prompt, ok = QInputDialog.getText(window, "Ask ChatGPT", "Enter your question:")
+        if ok and prompt.strip():
+            print(f"Prompt: {prompt.strip()}")
+            print(f"Screenshot path: {image_path}")
+        else:
+            print("Prompt cancelled.")
+            
     else:
-        print("F4 → One or both toggles OFF")
+        print("[F4] Skipping – one or both toggles are off")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = PeekAssistant()
     window.show()
 
-    keyboard.add_hotkey('ctrl+h', toggle_visibility)
-    keyboard.add_hotkey('f4', Execute)
+    # 🔥 Qt-native hotkeys — NO threading issues
+    toggle_shortcut = QShortcut(QKeySequence("Ctrl+H"), window)
+    toggle_shortcut.activated.connect(toggle_visibility)
+
+    f4_shortcut = QShortcut(QKeySequence("F4"), window)
+    f4_shortcut.activated.connect(run_f4_logic)
 
     sys.exit(app.exec_())
