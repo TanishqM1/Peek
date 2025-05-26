@@ -18,6 +18,12 @@ def toggle_visibility():
     else:
         window.show()
 
+def togglescreenshot():
+    window.ss_switch.toggle()
+
+def toggleprompt():
+    window.prompt_switch.toggle()
+
 # function to get latest screenshot (prompt prep)
 def get_latest_screenshot():
     try:
@@ -92,6 +98,8 @@ if __name__ == "__main__":
     # Listen globally for ctrl+h
     def hotkeys():
         keyboard.add_hotkey('ctrl+h', toggle_visibility)
+        keyboard.add_hotkey('ctrl+s', togglescreenshot)
+        keyboard.add_hotkey('ctrl+p', toggleprompt)
     threading.Thread(target=hotkeys, daemon=True).start()
 
     # Local hotkey for F4
