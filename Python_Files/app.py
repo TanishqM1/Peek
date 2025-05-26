@@ -49,6 +49,7 @@ def run_f4_logic():
             return
 
         dialog = PromptDialog()
+        dialog.move(window.pos())
         if dialog.exec_():
             prompt = dialog.prompt
             print(f"Prompt: {prompt}")
