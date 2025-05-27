@@ -53,4 +53,11 @@ The goal of PeekAssitant is to be a 'stay-out-of-your-way' desktop agent that ca
 - Response history sidebar or persistent thread mode
 - Continued UI development, and minimalistic, easy to use design!
 
+### Minimal Changes
+
+- Add loading feedback for long API responses.
+- File cleanup mechanism for .peek_cache to prevent buildup.
+- Error popups (e.g., if no screenshot is captured or API fails).
+- UI animation or subtle transitions to enhance user experience.
+
 ---
