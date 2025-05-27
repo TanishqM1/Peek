@@ -7,7 +7,6 @@ class PromptDialog(QDialog):
         self.setWindowTitle("Prompt")
         self.resize(322, 80)
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.Dialog)
-        self.setAttribute(Qt.WA_TranslucentBackground)
         self.setStyleSheet("""
             QDialog {
                 background-color: #2b2b2b;
@@ -17,7 +16,6 @@ class PromptDialog(QDialog):
             QTextEdit {
                 background-color: #1e1e1e;
                 color: white;
-                border: 1.5px solid rgba(200, 200, 200, 0.2);
                 border-radius: 6px;
                 padding: 6px;
                 font-size: 12px;
