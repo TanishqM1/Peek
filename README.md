@@ -34,6 +34,7 @@ All input is formatted and sent to the OpenAI API using GPT-4o, returning intell
 
 ###  UI Design
 
+- Most Urgent: AI Response window! When a request is sent, the response should be neatly kept in a response window that is seamless alongside the users screen, and shouldn't block the task the user is attempting to do. (should also have hotkeys to move, and hide).
 - Refining the dark, minimal PeekAssistant panel
 - Custom, stylized prompt entry dialog
 - Dynamic positioning and animation for popups
