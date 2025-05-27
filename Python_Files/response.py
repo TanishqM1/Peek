@@ -70,16 +70,47 @@ class ResponsePopup(QDialog):
         self.move(x, y)
 
     def format_text(self, text: str) -> str:
-        # Escape HTML entities
+        # Escape HTML
         text = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
-        # Convert **bold** to <b>bold</b>
-        text = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", text)
+        # Code blocks (```code```)
+        text = re.sub(r"```(?:\w*\n)?(.*?)```", r"<pre style='background-color:#1e1e1e;color:#c5c8c6;padding:8px;border-radius:6px;'>\1</pre>", text, flags=re.DOTALL)
 
-        # Convert code blocks
-        text = re.sub(r"```(.*?)```", r"<pre style='background-color:#1e1e1e;color:#c5c8c6;padding:8px;border-radius:6px;'>\1</pre>", text, flags=re.DOTALL)
+        # Inline code (`code`)
+        text = re.sub(r"`([^`\n]+)`", r"<code style='background-color:#2d2d2d;padding:2px 4px;border-radius:4px;'>\1</code>", text)
 
-        # Convert line breaks
+        # Bold+Italic (***text***)
+        text = re.sub(r"\*\*\*(.+?)\*\*\*", r"<b><i>\1</i></b>", text)
+
+        # Bold (**text**)
+        text = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", text)
+
+        # Italic (*text*)
+        text = re.sub(r"\*(.+?)\*", r"<i>\1</i>", text)
+
+        # Headers
+        text = re.sub(r"^### (.*)$", r"<h3>\1</h3>", text, flags=re.MULTILINE)
+        text = re.sub(r"^## (.*)$", r"<h2>\1</h2>", text, flags=re.MULTILINE)
+        text = re.sub(r"^# (.*)$", r"<h1>\1</h1>", text, flags=re.MULTILINE)
+
+        # Blockquotes
+        text = re.sub(r"^> (.*)$", r"<blockquote style='margin:4px 0;padding-left:10px;border-left:2px solid #888;'>\1</blockquote>", text, flags=re.MULTILINE)
+
+        # Horizontal rules
+        text = re.sub(r"^(---|\*\*\*)$", r"<hr>", text, flags=re.MULTILINE)
+
+        # Bullet list
+        text = re.sub(r"^- (.*)$", r"<li>\1</li>", text, flags=re.MULTILINE)
+        if "<li>" in text:
+            text = re.sub(r"(<li>.*?</li>)", r"<ul>\1</ul>", text, flags=re.DOTALL)
+
+        # Numbered list
+        text = re.sub(r"^\d+\. (.*)$", r"<li>\1</li>", text, flags=re.MULTILINE)
+        if "<li>" in text and "<ul>" not in text:
+            text = re.sub(r"(<li>.*?</li>)", r"<ol>\1</ol>", text, flags=re.DOTALL)
+
+        # Line breaks
         text = text.replace("\n", "<br>")
 
         return f"<div>{text}</div>"
+
