@@ -14,7 +14,8 @@ PeekAssistant enables users to:
 -  **Toggle features** using global or in-focus hotkeys
 -  **Stay out of your way** with a transparent, minimal UI and frameless design
 
-All input is formatted and sent to the OpenAI API using GPT-4o, returning intelligent responses based on the visual and/or textual context provided.
+All input is formatted and sent to the OpenAI API using GPT-4o, returning intelligent responses based on the visual and/or textual context provided. 
+The goal of PeekAssitant is to be a 'stay-out-of-your-way' desktop agent that can be be used using only hotkeys, anywhere on your desktop.
 
 ---
 
@@ -25,8 +26,8 @@ All input is formatted and sent to the OpenAI API using GPT-4o, returning intell
 | `F4`              | Activate Peek logic (screenshot/prompt)  |
 | `Ctrl + Alt + Q`  | Exit the application                     |
 | `Ctrl + H`        | Toggle visibility of PeekAssistant       |
-| `Ctrl + 1`        | Toggle Screenshot switch                 |
-| `Ctrl + 2`        | Toggle Prompt switch                     |
+| `Ctrl + s`        | Toggle Screenshot switch                 |
+| `Ctrl + p`        | Toggle Prompt switch                     |
 
 ---
 
@@ -34,14 +35,13 @@ All input is formatted and sent to the OpenAI API using GPT-4o, returning intell
 
 ###  UI Design
  
-- Refining the dark, minimal PeekAssistant panel
-- Custom, stylized prompt entry dialog
 - Dynamic positioning and animation for popups
 - Preventing window clutter during snips/prompts
+- Allowing out-of-focus functionality for the PeekAssistant window.
 
 ###  Backend & Functionality
 
-- Working on optimizing prompt & image parameters to ensure accurate results.
+- Working on optimizing prompt & image parameters through various prompt preparation techniques to ensure accurate results 
 - Working seamlessly in with apps in **Borderless Fullscreen**.
 - Error handling and input validation
 
