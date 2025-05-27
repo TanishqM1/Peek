@@ -49,7 +49,7 @@ class PeekAssistant(QWidget):
         frame.setObjectName("BackgroundFrame")
         frame.setStyleSheet("""
             QFrame#BackgroundFrame {
-                background-color: rgba(49, 49, 49, 204);
+                background-color: rgba(49, 49, 49, 240);
                 border-radius: 10px;
             }
             QLabel {
