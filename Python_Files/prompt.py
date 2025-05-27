@@ -1,89 +1,90 @@
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QTextEdit, QPushButton, QHBoxLayout
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QPoint
 
 class PromptDialog(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Prompt")
-        self.resize(322, 80)
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Dialog)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Dialog | Qt.WindowStaysOnTopHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+
+        self.prompt = None
+        self.dragging = False
+        self.offset = QPoint()
+
         self.setStyleSheet("""
             QDialog {
-                background-color: #2b2b2b;
-                border: 1px solid #444;
-                border-radius: 6px;
+                background-color: rgba(30, 30, 30, 180);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 8px;
             }
             QTextEdit {
-                background-color: #1e1e1e;
+                background-color: rgba(0,0,0,210);
                 color: white;
-                border-radius: 6px;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 8px;
                 padding: 6px;
-                font-size: 12px;
+                font-size: 13px;
                 font-family: "Segoe UI", "Helvetica Neue", sans-serif;
             }
             QPushButton {
-                background-color: #3a3a3a;
+                background-color: rgba(0,0,0, 240);
                 color: white;
                 border: none;
-                border-radius: 3px;
-                padding: 2px 6px;
-                font-size: 11px;
+                border-radius: 4px;
+                padding: 4px 10px;
+                font-size: 12px;
             }
             QPushButton:hover {
-                background-color: #555;
+                background-color: rgba(255, 255, 255, 0.2);
             }
         """)
 
-        self.prompt = None
         self.init_ui()
 
     def init_ui(self):
-        layout = QVBoxLayout()
-        layout.setContentsMargins(6, 6, 6, 6)
-        layout.setSpacing(4)
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(10, 10, 10, 10)
+        layout.setSpacing(6)
 
         self.textbox = QTextEdit()
-        self.textbox.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.textbox.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.textbox.setPlaceholderText("enter additional information for ai prompt")
-
-
-        self.textbox.setFixedHeight(40)
-        self.textbox.setSizePolicy(
-            self.textbox.sizePolicy().horizontalPolicy(),
-            self.textbox.sizePolicy().Expanding
-        )
+        self.textbox.setPlaceholderText("Enter your prompt here...")
         self.textbox.textChanged.connect(self.adjust_textbox_height)
         layout.addWidget(self.textbox)
 
         btn_layout = QHBoxLayout()
-        btn_layout.addStretch(1)
-
-        cancel_btn = QPushButton("X")
-        ok_btn = QPushButton("OK")
-
-        cancel_btn.setFixedSize(40, 18)
-        ok_btn.setFixedSize(40, 18)
-
-        cancel_btn.clicked.connect(self.reject)
-        ok_btn.clicked.connect(self.accept_prompt)
-
-        btn_layout.addWidget(cancel_btn)
-        btn_layout.addWidget(ok_btn)
+        btn_layout.addStretch()
+        no_btn = QPushButton("X")
+        yes_btn = QPushButton("Yes")
+        no_btn.clicked.connect(self.reject)
+        yes_btn.clicked.connect(self.accept_prompt)
+        btn_layout.addWidget(no_btn)
+        btn_layout.addWidget(yes_btn)
         layout.addLayout(btn_layout)
 
-        self.setLayout(layout)
+        self.adjust_textbox_height()
 
     def adjust_textbox_height(self):
         doc_height = self.textbox.document().size().height()
-        new_height = int(doc_height + 10)
-        self.textbox.setFixedHeight(new_height)
-        self.resize(self.width(), new_height + 50)
+        self.textbox.setFixedHeight(int(doc_height + 20))
+        self.resize(self.width(), self.textbox.height() + 60)
 
     def accept_prompt(self):
         text = self.textbox.toPlainText().strip()
         if text:
             self.prompt = text
             self.accept()
-    
 
+    # Drag-to-move functionality
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.dragging = True
+            self.offset = event.globalPos() - self.frameGeometry().topLeft()
+
+    def mouseMoveEvent(self, event):
+        if self.dragging:
+            self.move(event.globalPos() - self.offset)
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.dragging = False
