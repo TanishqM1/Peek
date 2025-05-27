@@ -83,6 +83,8 @@ def run_f4_logic():
 
         response = chat_with_gpt(prompt="Please Solve This", image_path=image_path)
         print(response)
+        popup = ResponsePopup(response)
+        popup.exec_()
 
         if not image_path:
             print("No screenshot was saved.")
@@ -102,6 +104,8 @@ def run_f4_logic():
 
             response = chat_with_gpt(prompt=prompt)
             print(response)
+            popup = ResponsePopup(response)
+            popup.exec_()
         else:
             print("Prompt cancelled or empty.")
         toggle_visibility()
