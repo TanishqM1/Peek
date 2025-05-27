@@ -60,8 +60,8 @@ class PromptDialog(QDialog):
         ok_btn.clicked.connect(self.accept_prompt)
         cancel_btn.clicked.connect(self.reject)
 
-        btn_layout.addWidget(ok_btn)
         btn_layout.addWidget(cancel_btn)
+        btn_layout.addWidget(ok_btn)
         layout.addLayout(btn_layout)
 
         self.setLayout(layout)
