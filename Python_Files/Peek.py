@@ -10,7 +10,7 @@ from gui import PeekAssistant
 from prompt import PromptDialog  # custom prompt window
 from api_request import chat_with_gpt
 from PyQt5.QtGui import QIcon
-
+from response import ResponsePopup
 
 TEMP_FOLDER = os.path.join(os.getcwd(), ".peek_cache")
 
@@ -66,6 +66,9 @@ def run_f4_logic():
         
             response = chat_with_gpt(prompt=prompt, image_path=image_path)
             print(response)
+            popup = ResponsePopup(response)
+            popup.exec_()
+        
 
         else:
             print("Prompt cancelled.")

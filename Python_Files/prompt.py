@@ -52,8 +52,8 @@ class PromptDialog(QDialog):
         btn_layout = QHBoxLayout()
         btn_layout.addStretch(1)
 
-        ok_btn = QPushButton("OK")
         cancel_btn = QPushButton("X")
+        ok_btn = QPushButton("OK")
         ok_btn.setFixedSize(40, 18)
         cancel_btn.setFixedSize(40, 18)
 
