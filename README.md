@@ -1,32 +1,58 @@
-# Current Functionality
-> Users are able to use PeekAssistant to capture screenhsots, enter prompts, or both using a simple hotkey from anywhere on their desktop. PeekAssistant will prompt users to take a screenshot and/or enter prompts for AI. The information is then formatted into a request to the OpenAI API platform where GPT 4.0 is used to answer and solve problems. There are additional features to make the app minimalistic such as toggling visibility, and transparent UI designs where possible to ensure PeekAssitant doesn't take up any window space.
+#  PeekAssistant — Lightweight AI Overlay
 
+A minimal, desktop-only assistant that lets you instantly capture screenshots, enter prompts, or both — and get real-time answers via GPT-4o.
 
-# Upcoming Features and Bug Fixes
+---
 
-### UI Design
-- Working on created a minimalistic UI design for "PeekAssistant", helping users utilize features without taking up too much window space or causing a distraction.
-- Focusing on creating a clean responsive user-prompt window for AI prompting.
-- Developing scripts to minimize window clutter when events like screenshots and prompts are open, to minimize the effect it has on other windows open.
+##  Current Functionality
 
+PeekAssistant enables users to:
 
-### Backend Functionality
-- Developing AI prompting functionality based on user parameters and information given.
-- Developing hotkeys to handle PeekAssistant visibility, toggling screenshot/prompting features, and exitting the application.
-- Developing features to allow the application to work alongside other windows in Bordered Fullscreen without causing interruptions.
+-  **Take screenshots** using a snipping tool overlay
+-  **Enter prompts** to send questions or context
+-  **Combine screenshot + prompt** for full context AI requests
+-  **Toggle features** using global or in-focus hotkeys
+-  **Stay out of your way** with a transparent, minimal UI and frameless design
 
-### Future Updates/Ideas
-- Allow users to switch between AI models based on their situation (i.e Claude for coding, Gemini for visual tasks, or GPT for standard tasks).
-- Allow users to tweak parameters using an "Advanced" mode in the application
-- Allow users to save multiple screenshots, or files as projects to use older information as a part of their prompt.
+All input is formatted and sent to the OpenAI API using GPT-4o, returning intelligent responses based on the visual and/or textual context provided.
 
+---
 
-#### current hotkeys
-- "f4" executes the program, and begins screenshot/prompting.
-- "ctrl+alt+q" exits the program.
-- "ctrl+h" toggles visilbity.
-- "ctrl+s" toggles the screenshot swtich.
-- "ctrl+p" toggles the prompt switch.
+##  Hotkeys
 
+| Hotkey            | Action                                  |
+|-------------------|------------------------------------------|
+| `F4`              | Activate Peek logic (screenshot/prompt)  |
+| `Ctrl + Alt + Q`  | Exit the application                     |
+| `Ctrl + H`        | Toggle visibility of PeekAssistant       |
+| `Ctrl + 1`        | Toggle Screenshot switch                 |
+| `Ctrl + 2`        | Toggle Prompt switch                     |
 
+---
 
+##  Upcoming Features & Fixes
+
+###  UI Design
+
+- Most Urgent: AI Response window! When a request is sent, the response should be neatly kept in a response window that is seamless alongside the users screen, and shouldn't block the task the user is attempting to do. (should also have hotkeys to move, and hide).
+  
+- Refining the dark, minimal PeekAssistant panel
+- Custom, stylized prompt entry dialog
+- Dynamic positioning and animation for popups
+- Preventing window clutter during snips/prompts
+
+###  Backend & Functionality
+
+- Working on optimizing prompt & image parameters to ensure accurate results.
+- Working seamlessly in with apps in **Borderless Fullscreen**.
+- Error handling and input validation
+
+### 💡 Future Ideas
+
+- Support for switching between AI models (Claude, Gemini, GPT)
+- “Advanced Mode” for prompt tuning (temperature, type of problem, saved project history, etc.)
+- Ability to save screenshots/files as "prompt sessions"
+- Response history sidebar or persistent thread mode
+- Continued UI development, and minimalistic, easy to use design!
+
+---
