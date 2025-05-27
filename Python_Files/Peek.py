@@ -76,7 +76,7 @@ def run_f4_logic():
         subprocess.run([sys.executable, "Python_Files\\screenshot.py"])
         image_path = get_latest_screenshot()
 
-        response = chat_with_gpt(image_path=image_path)
+        response = chat_with_gpt(prompt="Please Solve This", image_path=image_path)
         print(response)
 
         if not image_path:
