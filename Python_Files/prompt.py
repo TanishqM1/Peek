@@ -5,7 +5,7 @@ class PromptDialog(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Prompt")
-        self.resize(322, 80)  # 15% wider than 280
+        self.resize(322, 80)
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.Dialog)
         self.setStyleSheet("""
             QDialog {
@@ -18,8 +18,9 @@ class PromptDialog(QDialog):
                 color: white;
                 border: 1px solid #555;
                 border-radius: 3px;
-                padding: 4px;
+                padding: 6px;
                 font-size: 12px;
+                font-family: "Segoe UI", "Helvetica Neue", sans-serif;
             }
             QPushButton {
                 background-color: #3a3a3a;
@@ -43,9 +44,16 @@ class PromptDialog(QDialog):
         layout.setSpacing(4)
 
         self.textbox = QTextEdit()
+        self.textbox.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.textbox.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.textbox.setPlaceholderText("enter additional information for ai prompt")
+
+
         self.textbox.setFixedHeight(40)
-        self.textbox.setSizePolicy(self.textbox.sizePolicy().horizontalPolicy(), 
-                                   self.textbox.sizePolicy().Expanding)
+        self.textbox.setSizePolicy(
+            self.textbox.sizePolicy().horizontalPolicy(),
+            self.textbox.sizePolicy().Expanding
+        )
         self.textbox.textChanged.connect(self.adjust_textbox_height)
         layout.addWidget(self.textbox)
 
@@ -54,11 +62,12 @@ class PromptDialog(QDialog):
 
         cancel_btn = QPushButton("X")
         ok_btn = QPushButton("OK")
-        ok_btn.setFixedSize(40, 18)
-        cancel_btn.setFixedSize(40, 18)
 
-        ok_btn.clicked.connect(self.accept_prompt)
+        cancel_btn.setFixedSize(40, 18)
+        ok_btn.setFixedSize(40, 18)
+
         cancel_btn.clicked.connect(self.reject)
+        ok_btn.clicked.connect(self.accept_prompt)
 
         btn_layout.addWidget(cancel_btn)
         btn_layout.addWidget(ok_btn)
@@ -70,7 +79,7 @@ class PromptDialog(QDialog):
         doc_height = self.textbox.document().size().height()
         new_height = int(doc_height + 10)
         self.textbox.setFixedHeight(new_height)
-        self.resize(self.width(), new_height + 50)  # Adjust dialog height to fit
+        self.resize(self.width(), new_height + 50)
 
     def accept_prompt(self):
         text = self.textbox.toPlainText().strip()
