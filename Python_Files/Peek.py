@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QApplication, QShortcut
 from PyQt5.QtGui import QKeySequence
 from gui import PeekAssistant
 from prompt import PromptDialog  # custom prompt window
+from api_request import chat_with_gpt
 
 TEMP_FOLDER = os.path.join(os.getcwd(), ".peek_cache")
 
@@ -60,6 +61,10 @@ def run_f4_logic():
             prompt = dialog.prompt
             print(f"Prompt: {prompt}")
             print(f"Screenshot path: {image_path}")
+        
+            response = chat_with_gpt(prompt=prompt, image_path=image_path)
+            print(response)
+
         else:
             print("Prompt cancelled.")
         toggle_visibility()
@@ -70,6 +75,10 @@ def run_f4_logic():
         toggle_visibility()
         subprocess.run([sys.executable, "Python_Files\\screenshot.py"])
         image_path = get_latest_screenshot()
+
+        response = chat_with_gpt(image_path=image_path)
+        print(response)
+
         if not image_path:
             print("No screenshot was saved.")
             return
@@ -85,6 +94,9 @@ def run_f4_logic():
         if dialog.exec_():
             prompt = dialog.prompt
             print(f"[F4] User prompt: {prompt}")
+
+            response = chat_with_gpt(prompt=prompt)
+            print(response)
         else:
             print("Prompt cancelled or empty.")
         toggle_visibility()

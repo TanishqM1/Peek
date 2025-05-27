@@ -4,7 +4,7 @@ import base64
 from dotenv import load_dotenv
 
 load_dotenv()
-openai.api_key = os.getenv("CHATGPT_KEY") 
+openai.api_key = os.getenv("CHATGPT_KEY")
 
 def chat_with_gpt_image(prompt: str, image_path: str):
     with open(image_path, "rb") as image_file:
@@ -27,3 +27,22 @@ def chat_with_gpt_image(prompt: str, image_path: str):
         ]
     )
     return response.choices[0].message["content"]
+
+def chat_with_gpt_text(prompt: str):
+    response = openai.ChatCompletion.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "user", "content": prompt}
+        ]
+    )
+    return response.choices[0].message["content"]
+
+def chat_with_gpt(prompt=None, image_path=None):
+    if prompt and image_path:
+        return chat_with_gpt_image(prompt, image_path)
+    elif prompt:
+        return chat_with_gpt_text(prompt)
+    elif image_path:
+        return chat_with_gpt_image("Describe this image.", image_path)
+    else:
+        raise ValueError("Must provide at least a prompt or an image.")
