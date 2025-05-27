@@ -74,6 +74,10 @@ def run_f4_logic():
 
         dialog = PromptDialog()
         dialog.move(window.pos())
+        dialog.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
+        dialog.show()
+        QTimer.singleShot(100, lambda: force_focus(dialog))  # delay helps event loop catch up
+        
         if dialog.exec_():
             prompt = dialog.prompt
             print(f"Prompt: {prompt}")
