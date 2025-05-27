@@ -48,7 +48,7 @@ class ResponsePopup(QDialog):
 
         top_bar = QHBoxLayout()
         top_bar.addStretch()
-        close_btn = QPushButton("✕")
+        close_btn = QPushButton("\u2715")
         close_btn.clicked.connect(self.close)
         top_bar.addWidget(close_btn)
         inner_layout.addLayout(top_bar)
@@ -70,47 +70,53 @@ class ResponsePopup(QDialog):
         self.move(x, y)
 
     def format_text(self, text: str) -> str:
-        # Escape HTML
         text = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
-        # Code blocks (```code```)
         text = re.sub(r"```(?:\w*\n)?(.*?)```", r"<pre style='background-color:#1e1e1e;color:#c5c8c6;padding:8px;border-radius:6px;'>\1</pre>", text, flags=re.DOTALL)
-
-        # Inline code (`code`)
         text = re.sub(r"`([^`\n]+)`", r"<code style='background-color:#2d2d2d;padding:2px 4px;border-radius:4px;'>\1</code>", text)
-
-        # Bold+Italic (***text***)
         text = re.sub(r"\*\*\*(.+?)\*\*\*", r"<b><i>\1</i></b>", text)
-
-        # Bold (**text**)
         text = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", text)
-
-        # Italic (*text*)
         text = re.sub(r"\*(.+?)\*", r"<i>\1</i>", text)
 
-        # Headers
         text = re.sub(r"^### (.*)$", r"<h3>\1</h3>", text, flags=re.MULTILINE)
         text = re.sub(r"^## (.*)$", r"<h2>\1</h2>", text, flags=re.MULTILINE)
         text = re.sub(r"^# (.*)$", r"<h1>\1</h1>", text, flags=re.MULTILINE)
 
-        # Blockquotes
         text = re.sub(r"^> (.*)$", r"<blockquote style='margin:4px 0;padding-left:10px;border-left:2px solid #888;'>\1</blockquote>", text, flags=re.MULTILINE)
-
-        # Horizontal rules
         text = re.sub(r"^(---|\*\*\*)$", r"<hr>", text, flags=re.MULTILINE)
 
-        # Bullet list
-        text = re.sub(r"^- (.*)$", r"<li>\1</li>", text, flags=re.MULTILINE)
-        if "<li>" in text:
-            text = re.sub(r"(<li>.*?</li>)", r"<ul>\1</ul>", text, flags=re.DOTALL)
-
-        # Numbered list
-        text = re.sub(r"^\d+\. (.*)$", r"<li>\1</li>", text, flags=re.MULTILINE)
-        if "<li>" in text and "<ul>" not in text:
-            text = re.sub(r"(<li>.*?</li>)", r"<ol>\1</ol>", text, flags=re.DOTALL)
-
-        # Line breaks
+        text = self.wrap_list_blocks(text)
         text = text.replace("\n", "<br>")
-
         return f"<div>{text}</div>"
 
+    def wrap_list_blocks(self, text):
+        lines = text.splitlines()
+        output = []
+        in_ul = in_ol = False
+
+        for line in lines:
+            if re.match(r"^\d+\.\s+.+", line):
+                if not in_ol:
+                    output.append("<ol>")
+                    in_ol = True
+                output.append(f"<li>{line.split('. ', 1)[1]}</li>")
+            elif re.match(r"^- .+", line):
+                if not in_ul:
+                    output.append("<ul>")
+                    in_ul = True
+                output.append(f"<li>{line[2:].strip()}</li>")
+            else:
+                if in_ul:
+                    output.append("</ul>")
+                    in_ul = False
+                if in_ol:
+                    output.append("</ol>")
+                    in_ol = False
+                output.append(line)
+
+        if in_ul:
+            output.append("</ul>")
+        if in_ol:
+            output.append("</ol>")
+
+        return "\n".join(output)
