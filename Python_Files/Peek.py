@@ -9,6 +9,8 @@ from PyQt5.QtGui import QKeySequence
 from gui import PeekAssistant
 from prompt import PromptDialog  # custom prompt window
 from api_request import chat_with_gpt
+from PyQt5.QtGui import QIcon
+
 
 TEMP_FOLDER = os.path.join(os.getcwd(), ".peek_cache")
 
@@ -105,6 +107,7 @@ def run_f4_logic():
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon("Icon.ico"))
     window = PeekAssistant()
     window.show()
 

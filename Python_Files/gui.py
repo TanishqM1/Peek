@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import (
     QApplication, QWidget, QLabel, QHBoxLayout, QVBoxLayout, QFrame, QCheckBox
 )
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
 
 
 class ToggleSwitch(QCheckBox):
@@ -122,6 +123,7 @@ class PeekAssistant(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon("Icon.ico"))
     window = PeekAssistant()
     window.show()
     sys.exit(app.exec_())
