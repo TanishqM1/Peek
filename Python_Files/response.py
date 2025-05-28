@@ -32,7 +32,7 @@ class ResponsePopup(QDialog):
                 font-family: "Segoe UI", "Helvetica Neue", sans-serif;
             }
             QPushButton {
-                background-color: transparent;
+                background-color: black;
                 color: #aaa;
                 font-size: 16px;
                 border: none;
