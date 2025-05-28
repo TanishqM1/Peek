@@ -2,8 +2,13 @@ import openai
 import os
 import base64
 from dotenv import load_dotenv
+import sys
 
-load_dotenv()
+
+base_dir = getattr(sys, '_MEIPASS', os.path.abspath("."))
+env_path = os.path.join(base_dir, ".env")
+load_dotenv(dotenv_path=env_path)
+
 openai.api_key = os.getenv("CHATGPT_KEY")
 
 def chat_with_gpt_image(prompt: str, image_path: str):
