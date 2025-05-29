@@ -1,6 +1,7 @@
 #  PeekAssistant — Lightweight AI Overlay
 
 A minimal, desktop-only assistant that lets you instantly capture screenshots, enter prompts, or both — and get real-time answers via GPT-4o.
+To use (beta), clone the repository, create a .env file, and create an openai api key variable. (CHATGPT_KEY = "[your_key]"). Then, run Peek.py to launch the app.
 
 ---
 
