@@ -15,6 +15,7 @@ from response import ResponsePopup
 from api_key_setup import ApiKeyDialog, get_config_file, get_appdata_path
 from PyQt5.QtCore import QObject, pyqtSignal, QTimer, Qt
 import openai
+from screenshot import start_snip
 
 
 TEMP_FOLDER = os.path.join(os.getcwd(), ".peek_cache")
@@ -63,57 +64,49 @@ def run_f4_logic():
     window.raise_()
     window.setFocus()
 
-    # CASE: both switches are ON
-    if screenshot_enabled and prompt_enabled:
-        print("[F4] Launching screenshot.py...")
-        toggle_visibility()
-        subprocess.run([sys.executable, "Python_Files\\screenshot.py"])
-
-        image_path = get_latest_screenshot()
+    def after_screenshot(image_path):
         if not image_path:
-            print("No screenshot found.")
+            print("No screenshot captured.")
+            toggle_visibility()
             return
 
-        dialog = PromptDialog()
-        dialog.move(window.pos())
-        dialog.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
-        dialog.show()
-        QTimer.singleShot(100, lambda: force_focus(dialog))  # delay helps event loop catch up
-        
-        if dialog.exec_():
-            prompt = dialog.prompt
-            print(f"Prompt: {prompt}")
-            print(f"Screenshot path: {image_path}")
-        
-            response = chat_with_gpt(prompt=prompt, image_path=image_path)
+        # CASE: both switches ON (screenshot + prompt)
+        if screenshot_enabled and prompt_enabled:
+            dialog = PromptDialog()
+            dialog.move(window.pos())
+            dialog.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
+            dialog.show()
+            QTimer.singleShot(100, lambda: force_focus(dialog))
+
+            if dialog.exec_():
+                prompt = dialog.prompt
+                print(f"Prompt: {prompt}")
+                print(f"Screenshot path: {image_path}")
+                response = chat_with_gpt(prompt=prompt, image_path=image_path)
+                print(response)
+                popup = ResponsePopup(response)
+                popup.exec_()
+            else:
+                print("Prompt cancelled.")
+
+        # CASE: screenshot only
+        elif screenshot_enabled and not prompt_enabled:
+            print(f"[F4] Screenshot only mode, path={image_path}")
+            response = chat_with_gpt(prompt="Please Solve This", image_path=image_path)
             print(response)
             popup = ResponsePopup(response)
             popup.exec_()
-        
 
-        else:
-            print("Prompt cancelled.")
         toggle_visibility()
 
-    # CASE: screenshot only!
-    elif screenshot_enabled and not prompt_enabled:
-        print("[F4] Screenshot only mode")
+    # --- screenshot + (maybe prompt) ---
+    if screenshot_enabled:
+        print("[F4] Starting snip...")
         toggle_visibility()
-        subprocess.run([sys.executable, "Python_Files\\screenshot.py"])
-        image_path = get_latest_screenshot()
+        global snip_widget     # keep reference so it's not garbage collected
+        snip_widget = start_snip(on_finished=after_screenshot)
 
-        response = chat_with_gpt(prompt="Please Solve This", image_path=image_path)
-        print(response)
-        popup = ResponsePopup(response)
-        popup.exec_()
-
-        if not image_path:
-            print("No screenshot was saved.")
-            return
-        print(f"[F4] Screenshot saved to: {image_path}")
-        toggle_visibility()
-
-    # CASE: prompt only!
+    # --- prompt only ---
     elif prompt_enabled and not screenshot_enabled:
         print("[F4] Prompt only mode")
         toggle_visibility()
@@ -121,22 +114,23 @@ def run_f4_logic():
         dialog.move(window.pos())
         dialog.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
         dialog.show()
-        QTimer.singleShot(100, lambda: force_focus(dialog))  # delay helps event loop catch up
-
+        QTimer.singleShot(100, lambda: force_focus(dialog))
 
         if dialog.exec_():
             prompt = dialog.prompt
             print(f"[F4] User prompt: {prompt}")
-
             response = chat_with_gpt(prompt=prompt)
             print(response)
             popup = ResponsePopup(response)
             popup.exec_()
         else:
             print("Prompt cancelled or empty.")
+
         toggle_visibility()
+
     else:
         print("Both Switches Are Off!")
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
