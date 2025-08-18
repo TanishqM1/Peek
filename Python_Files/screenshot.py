@@ -1,9 +1,10 @@
-# screenshot.py (unchanged original)
+# screenshot.py (using mss instead of PIL.ImageGrab)
 import sys
 import os
 import uuid
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PIL import ImageGrab
+import mss
+import mss.tools
 
 TEMP_FOLDER = os.path.join(os.getcwd(), ".peek_cache")
 os.makedirs(TEMP_FOLDER, exist_ok=True)
@@ -44,10 +45,19 @@ class SnippingWidget(QtWidgets.QWidget):
 
         self.hide()
         QtWidgets.QApplication.processEvents()
-        img = ImageGrab.grab(bbox=(x1, y1, x2, y2))
 
-        filename = os.path.join(TEMP_FOLDER, f"{uuid.uuid4()}.png")
-        img.save(filename)
+        # Capture region with mss
+        with mss.mss() as sct:
+            monitor = {
+                "top": y1,
+                "left": x1,
+                "width": x2 - x1,
+                "height": y2 - y1
+            }
+            img = sct.grab(monitor)
+            filename = os.path.join(TEMP_FOLDER, f"{uuid.uuid4()}.png")
+            mss.tools.to_png(img.rgb, img.size, output=filename)
+
         print("Saved to:", filename)
         self.close()
 
@@ -59,7 +69,3 @@ def snip():
 
 if __name__ == "__main__":
     snip()
-
-
-# Taken straight from PyQt fourms and documentation, altered for sizing, colouring, and transparency.
-
