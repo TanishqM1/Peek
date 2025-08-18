@@ -11,7 +11,7 @@ from prompt import PromptDialog  # custom prompt window
 from api_request import chat_with_gpt
 from PyQt5.QtGui import QIcon
 from response import ResponsePopup
-
+from api_key_setup import ApiKeyDialog, get_config_file
 from PyQt5.QtCore import QObject, pyqtSignal, QTimer, Qt
 
 
@@ -139,14 +139,31 @@ def run_f4_logic():
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setWindowIcon(QIcon("Icon.ico"))
+
+    # --- API key setup check ---
+    config_file = get_config_file()
+    api_key = None
+    if os.path.exists(config_file):
+        try:
+            with open(config_file, "r") as f:
+                api_key = json.load(f).get("api_key")
+        except Exception as e:
+            print("Error reading config:", e)
+
+    if not api_key:  # Launch setup dialog
+        dialog = ApiKeyDialog()
+        if dialog.exec_() != dialog.Accepted:
+            print("No API key provided, exiting.")
+            sys.exit(0)
+        api_key = dialog.api_key
+
+    # --- launch assistant once key is set ---
     window = PeekAssistant()
     window.show()
 
-    #initialize dispatcher
     dispatcher = HotkeyDispatcher()
     dispatcher.f4_triggered.connect(run_f4_logic)
 
-    # Listen globally for ctrl+h
     def hotkeys():
         keyboard.add_hotkey('ctrl+h', toggle_visibility)
         keyboard.add_hotkey('ctrl+s', togglescreenshot)
@@ -154,10 +171,11 @@ if __name__ == "__main__":
         keyboard.add_hotkey('f4', lambda: dispatcher.f4_triggered.emit())
     threading.Thread(target=hotkeys, daemon=True).start()
 
+    sys.exit(app.exec_())
+
     # local f4 hotkey. (must be run by the same thread as PyQT, otherwise it will crash.)
     # this means, the f4 hotkey will only run if that window is in focus.
     # a workaround, though not optimized is having a global f4 key, and running the logic using the same thread if pressed manually.
     # f4_shortcut = QShortcut(QKeySequence("F4"), window)
     # f4_shortcut.activated.connect(run_f4_logic)
 
-    sys.exit(app.exec_())
