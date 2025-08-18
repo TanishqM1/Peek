@@ -5,27 +5,22 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 
-
 class ToggleSwitch(QCheckBox):
     def __init__(self):
         super().__init__()
         self.setChecked(False)
-        self.setFixedSize(30, 16)
+        self.setFixedSize(32, 18)
         self.setStyleSheet("""
             QCheckBox::indicator {
-                width: 30px;
-                height: 16px;
-            }
-            QCheckBox::indicator:unchecked {
-                border-radius: 8px;
+                width: 32px;
+                height: 18px;
+                border-radius: 9px;
                 background-color: #555;
             }
             QCheckBox::indicator:checked {
-                border-radius: 8px;
-                background-color: #00c853;
+                background-color: #2196f3;
             }
         """)
-
 
 class PeekAssistant(QWidget):
     def __init__(self):
@@ -49,8 +44,8 @@ class PeekAssistant(QWidget):
         frame.setObjectName("BackgroundFrame")
         frame.setStyleSheet("""
             QFrame#BackgroundFrame {
-                background-color: rgba(49, 49, 49, 240);
-                border-radius: 10px;
+                background-color: rgba(30, 30, 30, 235);
+                border-radius: 14px;
             }
             QLabel {
                 color: white;
@@ -59,33 +54,31 @@ class PeekAssistant(QWidget):
 
         frame_layout = QHBoxLayout()
         frame_layout.setContentsMargins(12, 6, 12, 6)
-        frame_layout.setSpacing(8)
+        frame_layout.setSpacing(12)
 
-        # Bold, smooth title
+        # Title
         title = QLabel("PeekAI")
         title.setStyleSheet("font-weight: bold; font-size: 13px; color: white;")
         title.setAlignment(Qt.AlignVCenter)
         frame_layout.addWidget(title, alignment=Qt.AlignVCenter)
 
-        # Screenshot switch (label + switch)
+        # Screenshot switch row
         self.ss_switch = ToggleSwitch()
         ss_layout = QHBoxLayout()
-        ss_layout.setSpacing(3)
+        ss_layout.setSpacing(6)
         ss_label = QLabel("Screenshot")
-        ss_label.setFixedWidth(70)
-        ss_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        ss_label.setAlignment(Qt.AlignVCenter)
         ss_label.setStyleSheet("font-weight: bold; font-size: 11px; color: white;")
         ss_layout.addWidget(ss_label)
         ss_layout.addWidget(self.ss_switch)
         frame_layout.addLayout(ss_layout)
 
-        # Prompt switch (label + switch)
+        # Prompt switch row
         self.prompt_switch = ToggleSwitch()
         prompt_layout = QHBoxLayout()
-        prompt_layout.setSpacing(3)
+        prompt_layout.setSpacing(6)
         prompt_label = QLabel("Prompt")
-        prompt_label.setFixedWidth(70)
-        prompt_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        prompt_label.setAlignment(Qt.AlignVCenter)
         prompt_label.setStyleSheet("font-weight: bold; font-size: 11px; color: white;")
         prompt_layout.addWidget(prompt_label)
         prompt_layout.addWidget(self.prompt_switch)
@@ -95,9 +88,10 @@ class PeekAssistant(QWidget):
         outer_layout.addWidget(frame)
         self.setLayout(outer_layout)
 
-        self.setFixedSize(300, 40)
+        self.setFixedSize(320, 44)
         self.move(180, 60)
 
+    # --- interactions ---
     def keyPressEvent(self, event):
         self.pressed_keys.add(event.key())
         if self.required_keys.issubset(self.pressed_keys):
@@ -120,14 +114,9 @@ class PeekAssistant(QWidget):
         if event.button() == Qt.LeftButton:
             self.dragging = False
 
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setWindowIcon(QIcon("Icon.ico"))
     window = PeekAssistant()
     window.show()
     sys.exit(app.exec_())
-
-    # The "PeekAssistant" class is our reference to the current window object PeekAI runs within.
-
-
