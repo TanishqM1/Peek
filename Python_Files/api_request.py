@@ -1,15 +1,38 @@
 import openai
 import os
+import json
 import base64
-from dotenv import load_dotenv
+import json 
 import sys
 
+def get_appdata_path():
+    appdata = os.getenv("APPDATA") or os.path.expanduser("~/.config")
+    path = os.path.join(appdata, "Peek")
+    os.makedirs(path, exist_ok=True)
+    return path
 
-base_dir = getattr(sys, '_MEIPASS', os.path.abspath("."))
-env_path = os.path.join(base_dir, ".env")
-load_dotenv(dotenv_path=env_path)
+def get_config_file():
+    return os.path.join(get_appdata_path(), "config.json")
 
-openai.api_key = os.getenv("CHATGPT_KEY")
+def load_api_key():
+    # Try config.json first
+    config_file = get_config_file()
+    if os.path.exists(config_file):
+        try:
+            with open(config_file, "r") as f:
+                config = json.load(f)
+                key = config.get("api_key")
+                if key:
+                    return key.strip()
+        except Exception as e:
+            print("Error loading config.json:", e)
+    return None
+
+# Set key
+openai.api_key = load_api_key()
+if not openai.api_key:
+    print(" No API key found. Please run Peek to set it up.")
+    sys.exit(1)
 
 def chat_with_gpt_image(prompt: str, image_path: str):
     with open(image_path, "rb") as image_file:
