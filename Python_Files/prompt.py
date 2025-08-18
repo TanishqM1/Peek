@@ -1,4 +1,6 @@
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QTextEdit, QPushButton, QHBoxLayout
+from PyQt5.QtWidgets import (
+    QDialog, QVBoxLayout, QTextEdit, QPushButton, QHBoxLayout, QFrame
+)
 from PyQt5.QtCore import Qt, QPoint
 
 class PromptDialog(QDialog):
@@ -14,60 +16,74 @@ class PromptDialog(QDialog):
 
         self.setStyleSheet("""
             QDialog {
-                background-color: rgba(30, 30, 30, 180);
+                background-color: transparent;
+            }
+            QFrame#Container {
+                background-color: rgba(30, 30, 30, 200);
                 border: 1px solid rgba(255, 255, 255, 0.08);
-                border-radius: 8px;
+                border-radius: 14px;
             }
             QTextEdit {
-                background-color: rgba(0,0,0,210);
+                background-color: transparent;
                 color: white;
-                border: 1px solid rgba(255, 255, 255, 0.08);
-                border-radius: 8px;
-                padding: 6px;
+                border: none;
+                padding: 8px;
                 font-size: 13px;
                 font-family: "Segoe UI", "Helvetica Neue", sans-serif;
             }
             QPushButton {
-                background-color: rgba(0,0,0, 240);
+                background-color: transparent;
                 color: white;
+                font-weight: bold;
                 border: none;
-                border-radius: 4px;
+                border-radius: 6px;
                 padding: 4px 10px;
-                font-size: 12px;
+                font-size: 13px;
             }
             QPushButton:hover {
-                background-color: rgba(255, 255, 255, 0.2);
+                background-color: #2196f3;
+                color: white;
             }
         """)
 
         self.init_ui()
 
     def init_ui(self):
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(10, 10, 10, 10)
-        layout.setSpacing(6)
+        outer_layout = QVBoxLayout(self)
+        outer_layout.setContentsMargins(0, 0, 0, 0)
 
+        # ---- One container frame ----
+        container = QFrame()
+        container.setObjectName("Container")
+        container_layout = QHBoxLayout(container)  # horizontal so text + buttons share one row
+        container_layout.setContentsMargins(10, 10, 10, 10)
+        container_layout.setSpacing(6)
+
+        # --- Textbox (expands left) ---
         self.textbox = QTextEdit()
         self.textbox.setPlaceholderText("Enter your prompt here...")
+        self.textbox.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.textbox.textChanged.connect(self.adjust_textbox_height)
-        layout.addWidget(self.textbox)
+        container_layout.addWidget(self.textbox, stretch=1)  # take up most space
 
-        btn_layout = QHBoxLayout()
-        btn_layout.addStretch()
-        no_btn = QPushButton("X")
-        yes_btn = QPushButton("Yes")
-        no_btn.clicked.connect(self.reject)
-        yes_btn.clicked.connect(self.accept_prompt)
-        btn_layout.addWidget(no_btn)
-        btn_layout.addWidget(yes_btn)
-        layout.addLayout(btn_layout)
+        # --- Buttons inline to the right ---
+        self.no_btn = QPushButton("X")
+        self.yes_btn = QPushButton("Yes")
+        self.no_btn.clicked.connect(self.reject)
+        self.yes_btn.clicked.connect(self.accept_prompt)
+        container_layout.addWidget(self.no_btn)
+        container_layout.addWidget(self.yes_btn)
+
+        outer_layout.addWidget(container)
 
         self.adjust_textbox_height()
+        self.textbox.setFocus()
 
     def adjust_textbox_height(self):
         doc_height = self.textbox.document().size().height()
-        self.textbox.setFixedHeight(int(doc_height + 20))
-        self.resize(self.width(), self.textbox.height() + 60)
+        max_height = 250
+        self.textbox.setFixedHeight(min(int(doc_height + 20), max_height))
+        self.resize(self.width(), self.textbox.height() + 40)
 
     def accept_prompt(self):
         text = self.textbox.toPlainText().strip()
@@ -75,7 +91,16 @@ class PromptDialog(QDialog):
             self.prompt = text
             self.accept()
 
-    # Drag-to-move functionality
+    # --- Keyboard shortcuts ---
+    def keyPressEvent(self, event):
+        if event.key() in (Qt.Key_Return, Qt.Key_Enter):
+            self.accept_prompt()
+        elif event.key() == Qt.Key_Escape:
+            self.reject()
+        else:
+            super().keyPressEvent(event)
+
+    # Drag-to-move
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.dragging = True
