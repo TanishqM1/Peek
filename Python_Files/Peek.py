@@ -4,6 +4,7 @@ import os
 import subprocess
 import threading
 import keyboard
+import json
 from PyQt5.QtWidgets import QApplication, QShortcut, QDialog
 from PyQt5.QtGui import QKeySequence
 from gui import PeekAssistant
