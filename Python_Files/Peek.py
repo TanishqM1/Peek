@@ -12,8 +12,9 @@ from prompt import PromptDialog  # custom prompt window
 from api_request import chat_with_gpt
 from PyQt5.QtGui import QIcon
 from response import ResponsePopup
-from api_key_setup import ApiKeyDialog, get_config_file
+from api_key_setup import ApiKeyDialog, get_config_file, get_appdata_path
 from PyQt5.QtCore import QObject, pyqtSignal, QTimer, Qt
+import openai
 
 
 TEMP_FOLDER = os.path.join(os.getcwd(), ".peek_cache")
@@ -140,7 +141,7 @@ def run_f4_logic():
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setWindowIcon(QIcon("Icon.ico"))
-
+    get_appdata_path()
     # --- API key setup check ---
     config_file = get_config_file()
     api_key = None
@@ -157,6 +158,8 @@ if __name__ == "__main__":
             print("No API key provided, exiting.")
             sys.exit(0)
         api_key = dialog.api_key
+    openai.api_key = api_key
+    
 
     # --- launch assistant once key is set ---
     window = PeekAssistant()

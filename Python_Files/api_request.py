@@ -28,11 +28,8 @@ def load_api_key():
             print("Error loading config.json:", e)
     return None
 
-# Set key
-openai.api_key = load_api_key()
 if not openai.api_key:
     print(" No API key found. Please run Peek to set it up.")
-    sys.exit(1)
 
 def chat_with_gpt_image(prompt: str, image_path: str):
     with open(image_path, "rb") as image_file:
