@@ -2,7 +2,7 @@
 
 A minimal, **desktop-only** assistant that lets you instantly capture screenshots, enter prompts, or both — and get real-time answers via **GPT-4o**.
 
-PeekAssistant is designed to be a 'stay-out-of-your-way' desktop agent that can be used using only **hotkeys**, anywhere on your desktop. Its **transparent/translucent background** ensures it remains non-intrusive. You can see a demo/installation of the app at peekassistant.vercel.app
+PeekAssistant is designed to be a 'stay-out-of-your-way' desktop agent that can be used using only **hotkeys**, anywhere on your desktop. Its **transparent/translucent background** ensures it remains non-intrusive. You can see a demo/installation of the app at [PeekAssistant Website](https://peekassistant.vercel.app)
 
 ---
 
