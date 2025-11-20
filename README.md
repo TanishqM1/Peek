@@ -22,9 +22,9 @@ PeekAssistant enables users to leverage AI instantly through **dynamic prompting
 
 * **Take Screenshots** 📸: Use a built-in snipping tool overlay to capture specific regions of your screen.
 * **Enter Prompts** 💬: Send questions or context via a minimal text input.
-* **Combined Context** ✨: Seamlessly **combine a screenshot + a textual prompt** for full-context AI requests.
-* **Hotkeys Only** ⌨️: Activate the core logic and toggle features using global or in-focus hotkeys.
-* **Non-Intrusive Design** 👻: A transparent, minimal UI and frameless design ensure it stays out of your way.
+* **Combined Context** : Seamlessly **combine a screenshot + a textual prompt** for full-context AI requests.
+* **Hotkeys Only** : Activate the core logic and toggle features using global or in-focus hotkeys.
+* **Non-Intrusive Design** : A transparent, minimal UI and frameless design ensure it stays out of your way.
 
 All input is formatted and sent to the OpenAI API using **GPT-4o**, returning intelligent responses based on the visual and/or textual context provided.
 
