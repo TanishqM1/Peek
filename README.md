@@ -41,7 +41,7 @@ To use the application (beta):
 
 ---
 
-## 🔑 Hotkeys
+## Hotkeys
 
 | Hotkey | Action |
 | :--- | :--- |
@@ -54,7 +54,7 @@ To use the application (beta):
 ---
 
 
-### 🛠️ Backend & Functionality
+### Backend & Functionality
 
 * Optimized & image parameters for accurate results.
 * Enhancing compatibility to work seamlessly in **Borderless Fullscreen** applications.
@@ -63,7 +63,7 @@ To use the application (beta):
 * File cleanup mechanism for `.peek_cache` to prevent buildup.
 * Error popups (e.g., if no screenshot is captured or API fails).
 
-### 🎨 UI Design
+### UI Design
 
 * Dynamic positioning and animation for popups.
 * Preventing window clutter during snips/prompts.
